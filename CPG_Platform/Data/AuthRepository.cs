@@ -1,14 +1,13 @@
 ﻿using CPG_Platform.Data;
+using CPG_Platform.Dtos.User;
 using CPG_Platform.Models;
 using CPG_Platform.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace RPG_Game.Data
+namespace CPG_Platform.Data
 {
     public class AuthRepository : IAuthRepository
     {
@@ -41,21 +40,28 @@ namespace RPG_Game.Data
             return response; 
         }
 
-        public async Task<serviceResponse<int>> Register(User user, string password)
+        public async Task<serviceResponse<int>> Register(UserRegisterDto userRegister)
         {
             var ServiceResponse = new serviceResponse<int>();
-            if (await UserExists(user.Matricule))
+            
+            if (await UserExists(userRegister.Matricule))
             {
                 ServiceResponse.Success = false;
-                ServiceResponse.Message = "Username already exists.";
+                ServiceResponse.Message = "Matricule already exists.";
                 return ServiceResponse; 
             }
 
             else
             {
-                CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt); 
+                var user = new User { Matricule = userRegister.Matricule };
+                var Secteur = await _context.Sectors.FindAsync(userRegister.SecteurId);
+                CreatePasswordHash(userRegister.Password, out byte[] passwordHash, out byte[] passwordSalt); 
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
+                user.PhoneNumber = userRegister.PhoneNumber;
+                user.FirstName = userRegister.FirstName;
+                user.LastName = userRegister.LastName;
+                user.Secteur = Secteur; 
 
                  _context.Users.Add(user);
                 await _context.SaveChangesAsync();

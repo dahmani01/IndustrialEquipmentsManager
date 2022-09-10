@@ -1,7 +1,7 @@
 using CPG_Platform.Data;
 using Microsoft.EntityFrameworkCore;
 using CPG_Platform.Controllers;
-using RPG_Game.Data;
+using CPG_Platform.Data;
 using CPG_Platform.Services;
 using CPG_Platform.Models;
 using System.Text.Json.Serialization;

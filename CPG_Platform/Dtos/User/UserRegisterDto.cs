@@ -1,6 +1,6 @@
 ﻿using CPG_Platform.Models;
 
-namespace RPG_Game.Dtos.User
+namespace CPG_Platform.Dtos.User
 {
     public class UserRegisterDto
     {
@@ -9,6 +9,6 @@ namespace RPG_Game.Dtos.User
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
-        public Secteur Secteur { get; set; }
+        public int SecteurId { get; set; }
     }
 }
