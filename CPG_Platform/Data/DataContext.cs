@@ -5,18 +5,19 @@ namespace CPG_Platform.Data
 {
     public class DataContext : DbContext
     {
-        public DataContext(DbContextOptions<DbContext> options) : base(options)
+       
+        public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
 
         }
 
-        DbSet<User> Users => Set<User>(); 
-        DbSet<Secteur> Sectors => Set<Secteur>();
-        DbSet<Service> Services => Set<Service>();
-        DbSet<Entretient> Entretients => Set<Entretient>();
-        DbSet<Machine> Machines => Set<Machine>();
-        DbSet<PieceRechange> Pieces => Set<PieceRechange>();
-        DbSet<UploadResult> Documents => Set<UploadResult>();
+        public DbSet<User> Users => Set<User>(); 
+        public DbSet<Secteur> Sectors => Set<Secteur>();
+        public DbSet<Service> Services => Set<Service>();
+        public DbSet<Entretient> Entretients => Set<Entretient>();
+        public DbSet<Machine> Machines => Set<Machine>();
+        public DbSet<PieceRechange> Pieces => Set<PieceRechange>();
+        public DbSet<UploadResult> Documents => Set<UploadResult>();
 
     }
 

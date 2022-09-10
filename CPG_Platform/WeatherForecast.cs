@@ -1,3 +1,5 @@
+﻿using Microsoft.EntityFrameworkCore;
+using CPG_Platform.Data;
 namespace CPG_Platform
 {
     public class WeatherForecast
