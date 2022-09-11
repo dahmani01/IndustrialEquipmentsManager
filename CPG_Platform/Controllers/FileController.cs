@@ -35,7 +35,7 @@ namespace CPG_Platform.Controllers
         public async Task<ActionResult<List<UploadResult>>> UploadFile(List<IFormFile> files,int MachineId)
         {
             var response = await _service.UploadFile(files,MachineId);
-            if (response == null)
+            if (!response.Success)
             {
                 return NotFound(response.Message); 
             }
