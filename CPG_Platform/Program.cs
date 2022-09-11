@@ -5,9 +5,9 @@ using CPG_Platform.Models;
 using System.Text.Json.Serialization;
 using CPG_Platform.Services.UploadFileService;
 using CPG_Platform.Services.SectorService;
-using CPG_Platform.Services.SectorService;
-using CPG_Platform.Services.SeriviceService;
 using CPG_Platform.Services.MachineService;
+using CPG_Platform.Services.SeriviceService;
+using CPG_Platform.Services.EntretientService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +22,7 @@ builder.Services.AddScoped<IUploadFileService,UploadFileService>();
 builder.Services.AddScoped<ISectorService,SectorService>();
 builder.Services.AddScoped<IServiceService,ServiceService>();
 builder.Services.AddScoped<IMachineService, MachinesService>();
+builder.Services.AddScoped<IEntretientService,EntretientService>();
 builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
