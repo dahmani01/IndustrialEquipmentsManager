@@ -40,7 +40,7 @@ namespace CPG_Platform.Migrations
                     b.Property<int>("MachineId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -170,7 +170,7 @@ namespace CPG_Platform.Migrations
                     b.Property<string>("FileName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MachineId")
+                    b.Property<int?>("MachineId")
                         .HasColumnType("int");
 
                     b.Property<string>("StoredFileName")
@@ -239,16 +239,14 @@ namespace CPG_Platform.Migrations
             modelBuilder.Entity("CPG_Platform.Models.Entretient", b =>
                 {
                     b.HasOne("CPG_Platform.Models.Machine", "Machine")
-                        .WithMany()
+                        .WithMany("entretients")
                         .HasForeignKey("MachineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CPG_Platform.Models.User", "User")
                         .WithMany("Entretients")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Machine");
 
@@ -288,13 +286,9 @@ namespace CPG_Platform.Migrations
 
             modelBuilder.Entity("CPG_Platform.Models.UploadResult", b =>
                 {
-                    b.HasOne("CPG_Platform.Models.Machine", "Machine")
+                    b.HasOne("CPG_Platform.Models.Machine", null)
                         .WithMany("Documents")
-                        .HasForeignKey("MachineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Machine");
+                        .HasForeignKey("MachineId");
                 });
 
             modelBuilder.Entity("CPG_Platform.Models.User", b =>
@@ -317,6 +311,8 @@ namespace CPG_Platform.Migrations
                     b.Navigation("Documents");
 
                     b.Navigation("PieceRechanges");
+
+                    b.Navigation("entretients");
                 });
 
             modelBuilder.Entity("CPG_Platform.Models.Secteur", b =>

@@ -1,7 +1,7 @@
 ﻿using CPG_Platform.Data;
 using CPG_Platform.Dtos.Files;
 using CPG_Platform.Models;
-using CPG_Platform.Services;
+using CPG_Platform.Services.UploadFileService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

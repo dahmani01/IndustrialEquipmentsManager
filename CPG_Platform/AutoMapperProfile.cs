@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
-
+using CPG_Platform.Dtos.MachineDtos;
+using CPG_Platform.Dtos.Service;
+using CPG_Platform.Models;
 
 namespace CPG_Platform
 {
@@ -7,6 +9,10 @@ namespace CPG_Platform
     {
         public AutoMapperProfile()
         {
+            CreateMap<Service, GetServiceDto>();
+            CreateMap<Machine, GetMachineDto>();
+            CreateMap<UpdateMachineDto, Machine>(); 
+            CreateMap<AddNewMachineDto, Machine>(); 
             /*CreateMap<Character, GetCharacterDto>();
             CreateMap<AddCharacterDto,Character>();*/
         }

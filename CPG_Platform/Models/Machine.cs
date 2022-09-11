@@ -8,6 +8,7 @@
         public DateTime PurshaseDate  { get; set; }
         public bool EnService { get; set; } = true;
         public Service? Service { get; set; }
+        public List<Entretient>? entretients { get; set; }
         public List<PieceRechange>? PieceRechanges { get; set; }
         public List<UploadResult>? Documents { get; set; }
     }

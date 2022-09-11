@@ -7,7 +7,7 @@ namespace CPG_Platform.Models
         public int Id { get; set; }
         public string Description { get; set; }
         public DateTime Date { get; set; }
-        public User User { get; set; }
+        public User? User { get; set; }
         public Machine Machine { get; set; }
 
     }
