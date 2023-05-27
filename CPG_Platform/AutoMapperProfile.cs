@@ -12,12 +12,10 @@ namespace CPG_Platform
         {
             CreateMap<Service, GetServiceDto>();
             CreateMap<Machine, GetMachineDto>();
-            CreateMap<UpdateMachineDto, Machine>(); 
-            CreateMap<AddNewMachineDto, Machine>(); 
+            CreateMap<UpdateMachineDto, Machine>();
+            CreateMap<AddNewMachineDto, Machine>();
             CreateMap<User, GetUpdatedUserDto>();
             CreateMap<User, GetUserDto>();
-            /*CreateMap<Character, GetCharacterDto>();
-            CreateMap<AddCharacterDto,Character>();*/
         }
     }
 }

@@ -1,7 +1,5 @@
 using CPG_Platform.Data;
 using Microsoft.EntityFrameworkCore;
-using CPG_Platform.Controllers;
-using CPG_Platform.Models;
 using System.Text.Json.Serialization;
 using CPG_Platform.Services.UploadFileService;
 using CPG_Platform.Services.SectorService;
@@ -91,7 +89,7 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
-app.UseCors(); 
+app.UseCors();
 
 app.UseAuthentication();
 
