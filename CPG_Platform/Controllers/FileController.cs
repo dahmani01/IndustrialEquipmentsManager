@@ -2,11 +2,13 @@
 using CPG_Platform.Dtos.Files;
 using CPG_Platform.Models;
 using CPG_Platform.Services.UploadFileService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CPG_Platform.Controllers
 {
+    [Authorize(Roles ="Admin,Manager")]
     [Route("api/[controller]")]
     [ApiController]
     public class FileController : ControllerBase

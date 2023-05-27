@@ -4,6 +4,7 @@ using CPG_Platform.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CPG_Platform.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220911142854_DeletedMachineField")]
+    partial class DeletedMachineField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,6 +84,31 @@ namespace CPG_Platform.Migrations
                     b.HasIndex("ServiceId");
 
                     b.ToTable("Machines");
+                });
+
+            modelBuilder.Entity("CPG_Platform.Models.PieceRechange", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("MachineId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Quantite")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MachineId");
+
+                    b.ToTable("Pieces");
                 });
 
             modelBuilder.Entity("CPG_Platform.Models.Secteur", b =>
@@ -237,6 +264,17 @@ namespace CPG_Platform.Migrations
                     b.Navigation("Service");
                 });
 
+            modelBuilder.Entity("CPG_Platform.Models.PieceRechange", b =>
+                {
+                    b.HasOne("CPG_Platform.Models.Machine", "Machine")
+                        .WithMany("PieceRechanges")
+                        .HasForeignKey("MachineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Machine");
+                });
+
             modelBuilder.Entity("CPG_Platform.Models.Service", b =>
                 {
                     b.HasOne("CPG_Platform.Models.Secteur", "Secteur")
@@ -273,6 +311,8 @@ namespace CPG_Platform.Migrations
             modelBuilder.Entity("CPG_Platform.Models.Machine", b =>
                 {
                     b.Navigation("Documents");
+
+                    b.Navigation("PieceRechanges");
 
                     b.Navigation("entretients");
                 });

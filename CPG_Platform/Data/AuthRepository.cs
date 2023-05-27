@@ -22,51 +22,73 @@ namespace CPG_Platform.Data
         public async Task<serviceResponse<string>> Login(string matricule, string password)
         {
             var response = new serviceResponse<string>();
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Matricule.Trim().Equals(matricule.Trim())); 
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Matricule.Trim().Equals(matricule.Trim()));
             if (user == null)
             {
                 response.Success = false;
                 response.Message = "User not found.";
             }
-            else if (!VerifyPasswordHash(password, user.PasswordHash,user.PasswordSalt))
+            else if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
             {
                 response.Success = false;
-                response.Message = "Wrong Password."; 
+                response.Message = "Wrong Password.";
             }
             else
             {
                 response.Data = CreateToken(user);
             }
-            return response; 
+            return response;
         }
 
         public async Task<serviceResponse<int>> Register(UserRegisterDto userRegister)
         {
             var ServiceResponse = new serviceResponse<int>();
-            
+
             if (await UserExists(userRegister.Matricule))
             {
                 ServiceResponse.Success = false;
                 ServiceResponse.Message = "Matricule already exists.";
-                return ServiceResponse; 
+                return ServiceResponse;
             }
 
             else
             {
                 var user = new User { Matricule = userRegister.Matricule };
                 var Secteur = await _context.Sectors.FindAsync(userRegister.SecteurId);
-                CreatePasswordHash(userRegister.Password, out byte[] passwordHash, out byte[] passwordSalt); 
+                //validate password is not empty string
+                if (string.IsNullOrWhiteSpace(userRegister.Password))
+                {
+                    ServiceResponse.Success = false;
+                    ServiceResponse.Message = "Password is required.";
+                    return ServiceResponse;
+                }
+                CreatePasswordHash(userRegister.Password, out byte[] passwordHash, out byte[] passwordSalt);
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
+
+                //validate phone number
+                if (string.IsNullOrWhiteSpace(userRegister.PhoneNumber))
+                {
+                    ServiceResponse.Success = false;
+                    ServiceResponse.Message = "Phone number is required.";
+                    return ServiceResponse;
+                }
                 user.PhoneNumber = userRegister.PhoneNumber;
+                //validate firstName
+                if (string.IsNullOrWhiteSpace(userRegister.FirstName))
+                {
+                    ServiceResponse.Success = false;
+                    ServiceResponse.Message = "First name is required.";
+                    return ServiceResponse;
+                }
                 user.FirstName = userRegister.FirstName;
                 user.LastName = userRegister.LastName;
-                user.Secteur = Secteur; 
+                user.Secteur = Secteur;
 
-                 _context.Users.Add(user);
+                _context.Users.Add(user);
                 await _context.SaveChangesAsync();
-                ServiceResponse.Data = user.Id; 
-                return ServiceResponse; 
+                ServiceResponse.Data = user.Id;
+                return ServiceResponse;
             }
 
 
@@ -81,7 +103,7 @@ namespace CPG_Platform.Data
             return false;
         }
 
-        private void CreatePasswordHash(string password , out byte[] passwordHash , out byte[] passwordSalt)
+        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512())
             {
@@ -90,9 +112,9 @@ namespace CPG_Platform.Data
             }
         }
 
-        private bool VerifyPasswordHash(string password, byte[] passwordHash , byte[] passwordSalt)
+        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
-            using(var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
+            using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
             {
                 var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 return computeHash.SequenceEqual(passwordHash);
@@ -106,7 +128,7 @@ namespace CPG_Platform.Data
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) ,
                 new Claim(ClaimTypes.Name, user.FirstName+" "+user.LastName),
                 new Claim(ClaimTypes.Role,user.Role.ToString())
-            } ;
+            };
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8
                 .GetBytes(_configuration.GetSection("AppSettings:Token").Value));
@@ -119,10 +141,10 @@ namespace CPG_Platform.Data
                 SigningCredentials = creds
             };
 
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler(); 
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return tokenHandler.WriteToken(token); 
+            return tokenHandler.WriteToken(token);
         }
     }
 }
